@@ -25,6 +25,11 @@ public class Player : MonoBehaviour
     public int monedasRecolectadas = 0;
     public TextMeshProUGUI textCoins; // Referencia al texto de UI (TextMeshPro)
     
+    [Header("Audio")] // Sistema de sonidos para monedas y barriles
+    public AudioSource audioSource;
+    public AudioClip coinClip;
+    public AudioClip barrelClip;
+    
     private Rigidbody2D rb;
     private bool enElSuelo;
     private bool mirandoDerecha = true; // Para saber hacia dónde está mirando
@@ -37,6 +42,14 @@ public class Player : MonoBehaviour
         
         // Obtener el componente Animator
         animator = GetComponent<Animator>();
+        
+        // Obtener o crear el componente AudioSource
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+            if (mostrarDebug) Debug.Log("AudioSource creado automáticamente");
+        }
         
         // Verificar que tenemos Rigidbody2D
         if (rb == null)
@@ -252,6 +265,9 @@ public class Player : MonoBehaviour
             // Actualizar el texto de la UI
             ActualizarTextoMonedas();
             
+            // Reproducir sonido de moneda
+            ReproducirSonidoMoneda();
+            
             if (mostrarDebug)
             {
                 Debug.Log($"¡Moneda recolectada! Total: {monedasRecolectadas}");
@@ -292,6 +308,40 @@ public class Player : MonoBehaviour
         if (textCoins != null)
         {
             textCoins.text = monedasRecolectadas.ToString();
+        }
+    }
+    
+    // Función para reproducir sonido de moneda
+    public void ReproducirSonidoMoneda()
+    {
+        if (audioSource != null && coinClip != null)
+        {
+            audioSource.PlayOneShot(coinClip);
+            if (mostrarDebug)
+            {
+                Debug.Log("Reproduciendo sonido de moneda");
+            }
+        }
+        else if (mostrarDebug)
+        {
+            Debug.LogWarning("No se puede reproducir sonido de moneda: AudioSource o CoinClip faltante");
+        }
+    }
+    
+    // Función para reproducir sonido de barril
+    public void ReproducirSonidoBarril()
+    {
+        if (audioSource != null && barrelClip != null)
+        {
+            audioSource.PlayOneShot(barrelClip);
+            if (mostrarDebug)
+            {
+                Debug.Log("Reproduciendo sonido de barril");
+            }
+        }
+        else if (mostrarDebug)
+        {
+            Debug.LogWarning("No se puede reproducir sonido de barril: AudioSource o BarrelClip faltante");
         }
     }
     

@@ -170,6 +170,17 @@ public class Barrel : MonoBehaviour
             Debug.Log("💥 ¡DESTRUYENDO BARRIL AHORA!");
         }
         
+        // Reproducir sonido de destrucción en el Player
+        Player player = FindObjectOfType<Player>();
+        if (player != null)
+        {
+            player.ReproducirSonidoBarril();
+        }
+        else if (mostrarDebug)
+        {
+            Debug.LogWarning("No se pudo encontrar el Player para reproducir sonido");
+        }
+        
         // Cancelar cualquier animación en curso
         StopAllCoroutines();
         
